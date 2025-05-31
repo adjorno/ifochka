@@ -4,13 +4,13 @@ set -e
 
 # === Config ===
 BLOG_MODULE=blog
-BUILD_DIR=$BLOG_MODULE/build/kotlin-webpack/js/productionExecutable
+BUILD_DIR=$BLOG_MODULE/build/dist/js/productionExecutable
 TEMP_DIR=/tmp/gh-pages-deploy
 WORKTREE_DIR=/tmp/gh-pages-worktree
 CNAME_VALUE=ifochka.com
 
 echo "🔨 Building production site..."
-./gradlew :$BLOG_MODULE:jsBrowserProductionWebpack
+./gradlew :$BLOG_MODULE:jsBrowserDistribution
 
 echo "🧹 Cleaning temporary deploy directory..."
 rm -rf $TEMP_DIR
