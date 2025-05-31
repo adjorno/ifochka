@@ -1,22 +1,34 @@
 package com.ifochka.blog
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import com.ifochka.blog.ui.BlogList
 import com.ifochka.blog.ui.BlogPost
 import kotlinx.browser.document
 import kotlinx.browser.window
+import org.jetbrains.compose.web.dom.*
 import org.jetbrains.compose.web.renderComposable
+
+@JsName("commitSha")
+external val commitSha: String
 
 fun main() {
     renderComposable(rootElementId = "root") {
+        println("🔁 commitSha: $commitSha")
         val path = window.location.pathname
         println("🔁 Path: $path")
-        Router { slug ->
-            println("🔁 Slug: $slug")
-            if (slug == null) BlogList() else BlogPost(slug)
+
+        Div {
+            Router { slug ->
+                println("🔁 Slug: $slug")
+                if (slug == null) BlogList() else BlogPost(slug)
+            }
+
+            Footer {
+                Hr()
+                Small {
+                    Text("Version: $commitSha")
+                }
+            }
         }
     }
 }

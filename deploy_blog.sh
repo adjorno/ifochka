@@ -2,6 +2,10 @@
 
 set -e
 
+echo "📌 Writing commit SHA..."
+GIT_SHA=$(git rev-parse --short HEAD)
+echo "const commitSha = \"$GIT_SHA\";" > blog/src/jsMain/resources/version.js
+
 echo "🔨 Building production site..."
 ./gradlew :blog:jsBrowserDistribution
 
