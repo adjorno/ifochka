@@ -7,6 +7,7 @@ import kotlinx.browser.document
 import kotlinx.browser.window
 import org.jetbrains.compose.web.dom.*
 import org.jetbrains.compose.web.renderComposable
+import org.w3c.dom.url.URL
 
 @JsName("commitSha")
 external val commitSha: String
@@ -45,14 +46,13 @@ fun Router(content: @Composable (String?) -> Unit) {
 }
 
 private fun currentPath(): String? {
-    val base = (document.querySelector("base")?.getAttribute("href") ?: "/")
-        .trim('/')                      // e.g. "blog"
-    val full = window.location.pathname.trim('/')  // e.g. "blog/1234"
+    val basePath = URL(window.document.baseURI).pathname.trim('/')   // ← change
+    val full     = window.location.pathname.trim('/')
 
-    val relative = if (base.isNotEmpty() && full.startsWith(base))
-        full.drop(base.length).trimStart('/')      // "1234"
+    val relative = if (basePath.isNotEmpty() && full.startsWith(basePath))
+        full.drop(basePath.length).trimStart('/')
     else
-        full                                       // dev path
+        full
 
-    return relative.ifBlank { null }               // "" → list page
+    return relative.ifBlank { null }
 }
