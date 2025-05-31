@@ -18,7 +18,7 @@ fun BlogList() {
     Ul {
         articles.forEach { article ->
             Li {
-                A(href = "/blog/${article.id}") {
+                A(href = "/${article.id}") {
                     Text(article.title)
                 }
             }
