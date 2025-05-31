@@ -12,7 +12,7 @@ import org.jetbrains.compose.web.renderComposable
 
 fun main() {
     renderComposable(rootElementId = "root") {
-        val path = window.location.pathname.removeSuffix("/").removePrefix("/")
+        val path = window.location.pathname
         println("🔁 Path: $path")
         Router { slug ->
             println("🔁 Slug: $slug")
@@ -33,8 +33,14 @@ fun Router(content: @Composable (String?) -> Unit) {
 }
 
 private fun currentPath(): String? {
-    val base = document.querySelector("base")?.getAttribute("href") ?: "/"
-    val full = window.location.pathname
-    val relative = if (full.startsWith(base)) full.removePrefix(base) else full.removePrefix("/")
-    return relative.ifBlank { null }           // null → index page
+    val base = (document.querySelector("base")?.getAttribute("href") ?: "/")
+        .trim('/')                      // e.g. "blog"
+    val full = window.location.pathname.trim('/')  // e.g. "blog/1234"
+
+    val relative = if (base.isNotEmpty() && full.startsWith(base))
+        full.drop(base.length).trimStart('/')      // "1234"
+    else
+        full                                       // dev path
+
+    return relative.ifBlank { null }               // "" → list page
 }
