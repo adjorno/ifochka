@@ -3,23 +3,36 @@ package com.ifochka.blog.ui
 import androidx.compose.runtime.*
 import com.ifochka.blog.api.DevToApi
 import com.ifochka.blog.model.DevToArticle
-import org.jetbrains.compose.web.dom.*
+import org.jetbrains.compose.web.dom.Div
+import org.jetbrains.compose.web.dom.Text
+import org.jetbrains.compose.web.dom.H1
+import org.jetbrains.compose.web.dom.Article
+import org.w3c.dom.HTMLElement
 
 @Composable
 fun BlogPost(articleId: Int) {
     var article by remember { mutableStateOf<DevToArticle?>(null) }
+    val htmlContainer = remember { mutableStateOf<HTMLElement?>(null) }
 
     LaunchedEffect(articleId) {
         article = DevToApi.getArticleById(articleId)
     }
 
-    article?.let {
-        H1 { Text(it.title) }
+    article?.let { article ->
+        H1 { Text(article.title) }
 
         Article {
             Div(attrs = {
-                attr("dangerouslySetInnerHTML", it.body_html ?: "<p>No content</p>")
+                ref {
+                    htmlContainer.value = it
+                    onDispose { htmlContainer.value = null }
+                }
             })
         }
-    } ?: P { Text("Loading...") }
+
+        // This effect injects HTML into the div after composition
+        LaunchedEffect(article.bodyHtml) {
+            htmlContainer.value?.innerHTML = article.bodyHtml ?: "<p>No content</p>"
+        }
+    } ?: Text("Loading...")
 }
