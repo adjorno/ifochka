@@ -18,6 +18,6 @@ object DevToApi {
     suspend fun getArticles(): List<DevToArticle> =
         client.get("https://dev.to/api/articles?username=ifochka").body()
 
-    suspend fun getArticleById(id: Int): DevToArticle =
+    suspend fun getArticleById(id: String): DevToArticle =
         client.get("https://dev.to/api/articles/$id").body()
 }
