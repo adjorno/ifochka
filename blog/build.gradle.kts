@@ -1,34 +1,28 @@
 plugins {
-    alias(libs.plugins.kotlinJvm)
-    alias(libs.plugins.ktor)
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlin.serialization)
-    application
 }
 
-group = "com.ifochka"
-version = "unspecified"
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation(libs.ktor.server.core)
-    implementation(libs.ktor.client.java)
-    implementation(libs.ktor.server.netty)
-    implementation(libs.ktor.server.html.builder)
-    implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.serialization.kotlinx.json)
-    testImplementation(kotlin("test"))
-}
-
-tasks.test {
-    useJUnitPlatform()
-}
 kotlin {
-    jvmToolchain(17)
-}
+    js(IR) {
+        browser {
+            binaries.executable()
+        }
+    }
 
-application {
-    mainClass.set("com.ifochka.blog.ServerKt")
+    sourceSets {
+        val jsMain by getting {
+            dependencies {
+                implementation(compose.web.core)
+                implementation(compose.runtime)
+                implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.js)
+                implementation(libs.ktor.client.content.negotiation)
+                implementation(libs.ktor.serialization.kotlinx.json)
+                implementation(libs.kotlinx.serialization.json)
+            }
+        }
+    }
 }
