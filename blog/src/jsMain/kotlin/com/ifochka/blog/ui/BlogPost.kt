@@ -10,7 +10,7 @@ import org.jetbrains.compose.web.dom.Article
 import org.w3c.dom.HTMLElement
 
 @Composable
-fun BlogPost(articleId: Int) {
+fun BlogPost(articleId: String) {
     var article by remember { mutableStateOf<DevToArticle?>(null) }
     val htmlContainer = remember { mutableStateOf<HTMLElement?>(null) }
 
