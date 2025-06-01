@@ -2,7 +2,7 @@ package com.ifochka.blog.ui
 
 import androidx.compose.runtime.*
 import com.ifochka.blog.api.DevToApi
-import com.ifochka.blog.model.DevToArticle
+import com.ifochka.blog.model.DevToArticleFull
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.Text
 import org.jetbrains.compose.web.dom.H1
@@ -11,7 +11,7 @@ import org.w3c.dom.HTMLElement
 
 @Composable
 fun BlogPost(articleId: String) {
-    var article by remember { mutableStateOf<DevToArticle?>(null) }
+    var article by remember { mutableStateOf<DevToArticleFull?>(null) }
     val htmlContainer = remember { mutableStateOf<HTMLElement?>(null) }
 
     LaunchedEffect(articleId) {

@@ -1,58 +1,31 @@
 package com.ifochka.blog
 
-import androidx.compose.runtime.*
 import com.ifochka.blog.ui.BlogList
 import com.ifochka.blog.ui.BlogPost
-import kotlinx.browser.document
 import kotlinx.browser.window
 import org.jetbrains.compose.web.dom.*
 import org.jetbrains.compose.web.renderComposable
-import org.w3c.dom.url.URL
 
+@OptIn(ExperimentalJsExport::class)
+@JsExport
 @JsName("commitSha")
-external val commitSha: String
+val commitSha: String = "dev-local"
 
 fun main() {
+    val fullPath = window.location.pathname.removeSuffix("/")
+    println("Path: $fullPath")
+    val slug = fullPath.removePrefix("/blog").removePrefix("/")
+    println("Slug: $slug")
+
     renderComposable(rootElementId = "root") {
-        println("🔁 commitSha: $commitSha")
-        val path = window.location.pathname
-        println("🔁 Path: $path")
+        when {
+            slug.isNotBlank() -> BlogPost(articleId = slug)
+            else -> BlogList()
+        }
 
-        Div {
-            Router { slug ->
-                println("🔁 Slug: $slug")
-                if (slug == null) BlogList() else BlogPost(slug)
-            }
-
-            Footer {
-                Hr()
-                Small {
-                    Text("Version: $commitSha")
-                }
-            }
+        Footer {
+            Hr()
+            Small { Text("Version: $commitSha") }
         }
     }
-}
-
-@Composable
-fun Router(content: @Composable (String?) -> Unit) {
-    val location = remember { mutableStateOf(currentPath()) }
-
-    LaunchedEffect(Unit) {
-        window.onpopstate = { location.value = currentPath() }
-    }
-
-    content(location.value)
-}
-
-private fun currentPath(): String? {
-    val basePath = URL(window.document.baseURI).pathname.trim('/')   // ← change
-    val full     = window.location.pathname.trim('/')
-
-    val relative = if (basePath.isNotEmpty() && full.startsWith(basePath))
-        full.drop(basePath.length).trimStart('/')
-    else
-        full
-
-    return relative.ifBlank { null }
 }

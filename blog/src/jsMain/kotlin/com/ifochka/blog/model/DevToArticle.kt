@@ -4,7 +4,15 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class DevToArticle(
+data class DevToArticleSummary(
+    val id: Int,
+    val title: String,
+    val slug: String,
+    val url: String,
+)
+
+@Serializable
+data class DevToArticleFull(
     val id: Int,
     val title: String,
     val slug: String,
