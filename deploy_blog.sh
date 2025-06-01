@@ -29,6 +29,9 @@ echo "📦 Copying production files to /blog..."
 mkdir -p "$WORKTREE_DIR/blog"
 cp -r $BUILD_DIR/* "$WORKTREE_DIR/blog/"
 
+echo "📄 Copying 404.html to root of gh-pages..."
+cp 404.html "$WORKTREE_DIR/404.html"
+
 echo "🌐 Setting CNAME..."
 echo ifochka.com > "$WORKTREE_DIR/CNAME"
 

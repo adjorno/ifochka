@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Redirecting…</title>
+    <script type="text/javascript">
+        // Based on https://github.com/rafgraph/spa-github-pages
+        var l = window.location;
+        var pathSegmentsToKeep = 1;
+
+        var pathParts = l.pathname.slice(1).split('/');
+        var keep = pathParts.slice(0, pathSegmentsToKeep).join('/');
+        var route = pathParts.slice(pathSegmentsToKeep).join('/');
+
+        // Only redirect if there's actually a route to forward
+        if (route && !l.search.includes("?/")) {
+          var search = l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '';
+          var redirectUrl = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+                            '/' + keep + '/?/' + route.replace(/&/g, '~and~') + search + l.hash;
+          l.replace(redirectUrl);
+        } else {
+          document.body.innerHTML = "<h1>404 – Page Not Found</h1><p><a href='/'>Go to homepage</a></p>";
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>
