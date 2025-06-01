@@ -6,11 +6,6 @@ import kotlinx.browser.window
 import org.jetbrains.compose.web.dom.*
 import org.jetbrains.compose.web.renderComposable
 
-@OptIn(ExperimentalJsExport::class)
-@JsExport
-@JsName("commitSha")
-val commitSha: String = "dev-local"
-
 fun main() {
     val fullPath = window.location.pathname.removeSuffix("/")
     println("Path: $fullPath")
