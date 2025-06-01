@@ -25,8 +25,11 @@ rm -rf "$TEMP_DIR"
 mkdir -p "$WORKTREE_DIR"
 git worktree add --checkout "$WORKTREE_DIR" gh-pages
 
-echo "📦 Copying production files to /blog..."
+echo "🧼 Cleaning old /blog folder..."
+rm -rf "$WORKTREE_DIR/blog"
 mkdir -p "$WORKTREE_DIR/blog"
+
+echo "📦 Copying production files to /blog..."
 cp -r $BUILD_DIR/* "$WORKTREE_DIR/blog/"
 
 echo "📄 Copying 404.html to root of gh-pages..."
